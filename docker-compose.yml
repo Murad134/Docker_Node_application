@@ -1,0 +1,22 @@
+services:
+  app:
+    build:
+      context: ./docker_node_app
+      dockerfile: Dockerfile
+    container_name: docker_node_app
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+    volumes:
+      # Bind mount: host source code -> container /app
+      - ./docker_node_app:/app
+      # Named volume: keep container node_modules isolated from host
+      - node_modules_data:/app/node_modules
+      # Named volume: persist logs/data across container recreate
+      - app_logs:/app/logs
+    command: node app.js
+
+volumes:
+  node_modules_data:
+  app_logs:
